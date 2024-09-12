@@ -1,0 +1,53 @@
+schemaVersion: 2.1.0
+metadata:
+  name: my-openshift-function
+  version: 1.0.0
+  description: This is a development environment for the my-openshift-function project.
+  tags:
+    - python
+    - openshift
+    - function
+
+components:
+  - name: python-runtime
+    container:
+      image: python:3.9
+      memoryLimit: 512Mi
+      cpuLimit: 500m
+      mountSources: true
+      command:
+        - python
+      args:
+        - -m
+        - flask
+        - run
+      endpoints:
+        - name: http
+          targetPort: 5000
+          exposure: public
+
+commands:
+  - id: install-dependencies
+    exec:
+      component: python-runtime
+      commandLine: "pip install -r requirements.txt"
+      workingDir: /projects/my-openshift-function
+      group:
+        kind: build
+        isDefault: true
+
+  - id: run-function
+    exec:
+      component: python-runtime
+      commandLine: "python app.py"
+      workingDir: /projects/my-openshift-function
+      group:
+        kind: run
+        isDefault: true
+
+projects:
+  - name: my-openshift-function
+    source:
+      type: git
+      location: "https://github.com/jbanday808/Red-Hat_OpenShift.git"
+
