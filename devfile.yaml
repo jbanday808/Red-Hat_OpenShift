@@ -50,4 +50,4 @@ projects:
     source:
       type: git
       location: "https://github.com/jbanday808/Red-Hat_OpenShift.git"
-
+      branch: main   # Add the branch name (assuming 'main') or remove this line if not needed
