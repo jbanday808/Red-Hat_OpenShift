@@ -7,46 +7,50 @@ metadata:
     - python
     - openshift
     - function
-
 components:
   - name: python-runtime
     container:
-      image: python:3.9
+      image: 'python:3.9'
       memoryLimit: 512Mi
       cpuLimit: 500m
       mountSources: true
       command:
         - python
       args:
-        - -m
+        - '-m'
         - flask
         - run
       endpoints:
         - name: http
           targetPort: 5000
           exposure: public
-
+  - name: container-1
+    container:
+      image: ansible
+      mountSources: true
+  - name: container-2
+    container:
+      image: devfile.yaml
+      mountSources: true
 commands:
   - id: install-dependencies
     exec:
       component: python-runtime
-      commandLine: "pip install -r requirements.txt"
+      commandLine: pip install -r requirements.txt
       workingDir: /projects/my-openshift-function
       group:
         kind: build
         isDefault: true
-
   - id: run-function
     exec:
       component: python-runtime
-      commandLine: "python app.py"
+      commandLine: python app.py
       workingDir: /projects/my-openshift-function
       group:
         kind: run
         isDefault: true
-
 projects:
   - name: my-openshift-function
     git:
       remotes:
-        origin: "https://github.com/jbanday808/Red-Hat_OpenShift.git"
+        origin: 'https://github.com/jbanday808/Red-Hat_OpenShift.git'
